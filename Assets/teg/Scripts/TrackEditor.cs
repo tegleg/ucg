@@ -29,6 +29,8 @@ public class TrackEditor : MonoBehaviour {
     //bits making up current track
     public List<int> TrackBits;
 
+    List<GameObject> TrackCache;
+
     Transform CurrentTransform;
 
     int Index = 0;
@@ -46,6 +48,7 @@ public class TrackEditor : MonoBehaviour {
             if (nextBit == null)
             {
                 nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+               
             }
 
             if (Cam != null)
@@ -55,7 +58,7 @@ public class TrackEditor : MonoBehaviour {
                 newPosition.y = CamHeight;
                 CamLoc = newPosition;
             }
-
+             //TrackCache.Add(nextBit);
         }
         else
         {
@@ -77,6 +80,23 @@ public class TrackEditor : MonoBehaviour {
             }
 
             nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+        }
+    }
+
+    public void DeleteBit()
+    {
+        if (nextBit != null)
+        {
+            //remove from gameobject array
+          //  TrackCache.Remove(nextBit);
+            //remove from int array
+            TrackBits.RemoveAt(TrackBits.ToArray().Length-1);
+
+            Destroy(nextBit);
+            nextBit = lastBit;
+            //need to get the transform of the bit befor
+            //CurrentTransform = nextBit.transform.Find("end").transform;
+            // lastBit = TrackCache[TrackBits.ToArray().Length];
         }
     }
 
@@ -116,7 +136,11 @@ public class TrackEditor : MonoBehaviour {
 
     public void PlaceBit()
     {
+        //int for saving
         TrackBits.Add(Index);
+        //gameobject for deleting
+      //  TrackCache.Add(nextBit);
+
         CurrentTransform = nextBit.transform.Find("end").transform;
         lastBit = nextBit;
         
