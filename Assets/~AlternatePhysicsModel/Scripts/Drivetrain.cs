@@ -141,7 +141,7 @@ public class Drivetrain : MonoBehaviour {
 		// Automatic gear shifting. Bases shift points on throttle input and rpm.
 		if (automatic)
 		{
-			if (rpm >= maxRPM * (0.5f + 0.5f * throttleInput))
+			if (rpm >= maxRPM * (0.5f + 0.5f * throttleInput) && gear != 0)
 				ShiftUp ();
 			else if (rpm <= maxRPM * (0.25f + 0.4f * throttleInput) && gear > 2)
 				ShiftDown ();

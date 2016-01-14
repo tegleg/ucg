@@ -26,15 +26,21 @@ public class CarSelector : MonoBehaviour {
         GameObject oldCar = CurrentCar;
         oldCar.SetActive(false);
         CurrentCar = (GameObject)Instantiate(AllCars[Index], oldCar.transform.position, oldCar.transform.rotation);
+        print("ChangeCar = " + CurrentCar);
 
         if (bInMenu)
         {
-            CurrentCar.GetComponent<CamChanger>().DisableCams();
+            CamChanger cc =  CurrentCar.GetComponent<CamChanger>();
+            if (cc)
+            {
+                cc.DisableCams();
+            }
         }
         // 
         // Camera Cam = CurrentCar.transform.Find("hoodCamera");
 
         //save
+        print("saving index = "+Index);
         SaveGame.saveCar(Index);
 
         Destroy(oldCar);

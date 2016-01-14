@@ -8,7 +8,7 @@ using System.Collections;
 [RequireComponent (typeof (Drivetrain))]
 public class CarController : MonoBehaviour {
 
-	public bool Accel;
+	//public bool Accel;
 
 
 	// Add all wheels of the car here, so brake and steering forces can be applied to them.
@@ -34,10 +34,14 @@ public class CarController : MonoBehaviour {
 	float lastShiftTime = -1;
 	float handbrake;
 
+    //player input
 	bool accelKey;//.GetKey (KeyCode.UpArrow);
 	bool brakeKey;
+    //drivetrain inputs
+    bool accelInput;//.GetKey (KeyCode.UpArrow);
+    bool brakeInput;
 
-	float steerInput = 0;
+    float steerInput = 0;
 		
 	// cached Drivetrain reference
 	Drivetrain drivetrain;
@@ -152,24 +156,27 @@ public class CarController : MonoBehaviour {
 			if (steerInput < steering)
 				steering = steerInput;
 		}
-		
-		// Throttle/Brake
 
-		//bool accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
-		//bool brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
-		
-		if (drivetrain.automatic && drivetrain.gear == 0)
+        // Throttle/Brake
+
+        //bool accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
+        //bool brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
+
+        accelInput = accelKey;
+        brakeInput = brakeKey;
+
+        if (drivetrain.automatic && drivetrain.gear == 0)
 		{
-			accelKey = Input.GetKey (KeyCode.DownArrow);
-			brakeKey = Input.GetKey (KeyCode.UpArrow);
-		}
+            accelInput = brakeKey;
+            brakeInput = accelKey;
+        }
 		
 		if (Input.GetKey (KeyCode.LeftShift))
 		{
 			throttle += Time.deltaTime / throttleTime;
 			throttleInput += Time.deltaTime / throttleTime;
 		}
-		else if (accelKey)
+		else if (accelInput)
 		{
 			if (drivetrain.slipRatio < 0.10f)
 				throttle += Time.deltaTime / throttleTime;
@@ -192,7 +199,7 @@ public class CarController : MonoBehaviour {
 		}
 		throttle = Mathf.Clamp01 (throttle);
 
-		if (brakeKey)
+		if (brakeInput)
 		{
 			if (drivetrain.slipRatio < 0.2f)
 				brake += Time.deltaTime / throttleTime;

@@ -20,14 +20,23 @@ public class CamChanger : MonoBehaviour {
     public void DisableCams()
     {
         print("DisableCams");
-        ChaseCam.gameObject.SetActive(false);
-        ChaseCam.enabled = false;
+        if (ChaseCam)
+        {
+            ChaseCam.gameObject.SetActive(false);
+            ChaseCam.enabled = false;
+
+        }
+        
         HoodCam.gameObject.SetActive(false);
     }
 
 	// Use this for initialization
 	void Start () {
-		ChaseCam.gameObject.SetActive(true);
+        if (ChaseCam)
+        {
+            ChaseCam.gameObject.SetActive(true);
+        }
+		
 		HoodCam.gameObject.SetActive(false);
 	}
 	
