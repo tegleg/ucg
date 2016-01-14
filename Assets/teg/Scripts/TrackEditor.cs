@@ -22,14 +22,15 @@ public class TrackEditor : MonoBehaviour {
     //set this to start track piece in editor, will be changed in code as track is built
     public GameObject lastBit;
     //the current bit really, the one we decide which one to put next
-    private GameObject nextBit;
+    private GameObject currentBit;
 
     //available bits
     public GameObject[] AvailableBits;
     //bits making up current track
     public List<int> TrackBits;
 
-    List<GameObject> TrackCache;
+    List<GameObject> TrackCache = new List<GameObject>();
+    int chacheIndex = 0;
 
     Transform CurrentTransform;
 
@@ -45,10 +46,13 @@ public class TrackEditor : MonoBehaviour {
 
         if (bEditor)
         {
-            if (nextBit == null)
+            if (currentBit == null)
             {
-                nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
-               
+                currentBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+                print("currentBit = "+ currentBit);
+                TrackCache.Add(currentBit);
+                chacheIndex++;
+                print("chacheIndex = " + chacheIndex);
             }
 
             if (Cam != null)
@@ -58,7 +62,7 @@ public class TrackEditor : MonoBehaviour {
                 newPosition.y = CamHeight;
                 CamLoc = newPosition;
             }
-             //TrackCache.Add(nextBit);
+             //TrackCache.Add(currentBit);
         }
         else
         {
@@ -70,33 +74,60 @@ public class TrackEditor : MonoBehaviour {
 
     public void ChangeBit()
     {
-        if (nextBit != null)
+        if (currentBit != null)
         {
-            Destroy(nextBit);
+            Destroy(currentBit);
             Index++;
             if (Index >= AvailableBits.Length)
             {
                 Index = 0;
             }
 
-            nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+            currentBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+
         }
     }
 
     public void DeleteBit()
     {
-        if (nextBit != null)
+        if (currentBit != null)
         {
             //remove from gameobject array
-          //  TrackCache.Remove(nextBit);
-            //remove from int array
-            TrackBits.RemoveAt(TrackBits.ToArray().Length-1);
+            print("deletebit = "+ currentBit);
 
-            Destroy(nextBit);
-            nextBit = lastBit;
+           // TrackCache.Remove(currentBit);
+            Destroy(currentBit);
+            //remove from int array
+            TrackBits.RemoveAt(chacheIndex-2);
+           // Index = chacheIndex - 3;
+
+            chacheIndex--;
+            print("chacheIndex = "+ chacheIndex);
+
+            //chek em all
+            for (int i = 0; i< TrackCache.Count; i++)
+            {
+                print("TrackCache[i] = " + TrackCache[i]);
+            }
+
+            currentBit = TrackCache[chacheIndex];
+            print("new currentBit = " + currentBit);
             //need to get the transform of the bit befor
-            //CurrentTransform = nextBit.transform.Find("end").transform;
-            // lastBit = TrackCache[TrackBits.ToArray().Length];
+            //
+            lastBit = TrackCache[chacheIndex - 1];
+            print("new lastbit = "+ lastBit);
+             CurrentTransform = lastBit.transform.Find("end").transform;
+
+            Index = 0;
+
+            //move the camera
+            if (Cam != null)
+            {
+                Vector3 newPosition = CurrentTransform.position;
+                newPosition.y = CamHeight;
+                CamLoc = newPosition;
+                // lerp cam in update
+            }
         }
     }
 
@@ -104,11 +135,11 @@ public class TrackEditor : MonoBehaviour {
     {
         Index = Target;
 
-        if (nextBit != null)
+        if (currentBit != null)
         {
-            Destroy(nextBit);
+            Destroy(currentBit);
         }
-            nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+            currentBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
 
             Index++;
             if (Index >= AvailableBits.Length)
@@ -119,10 +150,10 @@ public class TrackEditor : MonoBehaviour {
             
         
 
-        CurrentTransform = nextBit.transform.Find("end").transform;
-        lastBit = nextBit;
+        CurrentTransform = currentBit.transform.Find("end").transform;
+        lastBit = currentBit;
 
-        nextBit = (GameObject)Instantiate(AvailableBits[Target], CurrentTransform.position, CurrentTransform.rotation);
+        currentBit = (GameObject)Instantiate(AvailableBits[Target], CurrentTransform.position, CurrentTransform.rotation);
 
         //move the camera
         if (Cam != null)
@@ -139,12 +170,19 @@ public class TrackEditor : MonoBehaviour {
         //int for saving
         TrackBits.Add(Index);
         //gameobject for deleting
-      //  TrackCache.Add(nextBit);
 
-        CurrentTransform = nextBit.transform.Find("end").transform;
-        lastBit = nextBit;
+        TrackCache.Add(currentBit);
+       // TrackCache.IndexOf(currentBit);
+        print("TrackCache.Add(currentBit) = "+ currentBit);
+       // print("TrackCache.IndexOf(currentBit) = " + TrackCache.IndexOf(currentBit));
+
+        CurrentTransform = currentBit.transform.Find("end").transform;
+        lastBit = currentBit;
         
-        nextBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+        currentBit = (GameObject)Instantiate(AvailableBits[Index], CurrentTransform.position, CurrentTransform.rotation);
+        
+        chacheIndex++;
+        print("chacheIndex = " + chacheIndex);
 
         //move the camera
         if (Cam != null)
@@ -211,28 +249,7 @@ public class TrackEditor : MonoBehaviour {
         }
 
 
-        Destroy(nextBit);
-
-
-
-
-        /*  string[] Readfile = new string[File.ReadAllLines(DataPath).Length];
-
-          print("loadtrack() length: "+ Readfile.Length);
-          print("loadtrack() whats in it? 0: " + Readfile[0]);
-
-          for (int i = 0; i < Readfile.Length; i++)
-          {
-              //value is the index of the track bit, got from a line in a text file
-              int value;
-
-              // attempt to parse the value using the TryParse functionality of the integer type
-              int.TryParse(Readfile[i], out value);
-              print("loadtrack() i, value: " + i+ ", "+ Readfile[i]);
-
-              //spawn bit
-              LoadBit(value);
-          }*/
+        Destroy(currentBit);
 
     }
 	

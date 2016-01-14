@@ -18,6 +18,7 @@ ModelImporter:
     100020: Main_Root
     100022: Wholecar
     100024: Wholecar_001
+    100026: formosawheel
     400000: Armature
     400002: B_L_Axle
     400004: B_L_Tire
@@ -31,12 +32,16 @@ ModelImporter:
     400020: Main_Root
     400022: Wholecar
     400024: Wholecar_001
+    400026: formosawheel
     2300000: Wholecar
     2300002: Wholecar_001
+    2300004: formosawheel
     3300000: Wholecar
     3300002: Wholecar_001
+    3300004: formosawheel
     4300000: Wholecar
     4300002: Wholecar_001
+    4300004: formosawheel
     7400000: Default Take
     9500000: //RootNode
     13700000: Wholecar
