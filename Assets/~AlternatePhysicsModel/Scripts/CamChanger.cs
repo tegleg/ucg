@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CamChanger : MonoBehaviour {
 
-	public Camera ChaseCam;
+	public GameObject ChaseCam;
 	public Camera HoodCam;
 
 	bool bHood = false;
@@ -11,8 +11,13 @@ public class CamChanger : MonoBehaviour {
 	public void ChangeCam(){
 		bHood = !bHood;
 
+        if (!ChaseCam)
+        {
+            ChaseCam = GameObject.FindWithTag("chasecam");
+        }
+
 		ChaseCam.gameObject.SetActive (!bHood);
-		ChaseCam.enabled = !bHood;
+		//ChaseCam.enabled = !bHood;
 		HoodCam.gameObject.SetActive (bHood); 
 
 	}
@@ -23,7 +28,7 @@ public class CamChanger : MonoBehaviour {
         if (ChaseCam)
         {
             ChaseCam.gameObject.SetActive(false);
-            ChaseCam.enabled = false;
+           // ChaseCam.enabled = false;
 
         }
         

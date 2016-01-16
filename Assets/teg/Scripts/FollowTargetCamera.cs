@@ -12,16 +12,26 @@ public class FollowTargetCamera : MonoBehaviour
         {
             Target = GameObject.FindWithTag("Player").transform;
         }
+        GameObject.FindWithTag("Player").GetComponent<CamChanger>().ChaseCam = this.gameObject;// GetComponent<Camera>();
     }
 
     void FixedUpdate()
     {
-        if (!Target)
+        if (!LookAtTarget)
         {
-           LookAtTarget = GameObject.FindWithTag("Player").transform;
-            Target = GameObject.Find("camtarget").transform;
-            GameObject.FindWithTag("Player").GetComponent<CamChanger>().ChaseCam = GetComponent<Camera>();
+            LookAtTarget = GameObject.FindWithTag("Player").transform;
+           // print("lookat "+ LookAtTarget);
+            GameObject.FindWithTag("Player").GetComponent<CamChanger>().ChaseCam = this.gameObject;
         }
+
+       // if (!Target)
+       // {
+           
+            Target = LookAtTarget.Find("camtarget").transform;
+          //  print("target " + Target);
+            GameObject.FindWithTag("Player").GetComponent<CamChanger>().ChaseCam = this.gameObject;
+       // }
+        
  
         var vector = Vector3.forward;
         var dir = Target.rotation * Vector3.forward;

@@ -131,14 +131,19 @@ public class CarController : MonoBehaviour {
 		float optimalSteering = angle / (wheels[0].maxSteeringAngle * Mathf.Deg2Rad);
 		if (fVelo < 1)
 			optimalSteering = 0;
-				
-		//float steerInput = 0;
-		//if (Input.GetButton("Left"))
-		//	steerInput = -1;
-		//if (Input.GetButton("Right"))
-		//	steerInput = 1;
 
-		if (steerInput < steering)
+        //float 
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            steerInput = 0;
+            if (Input.GetButton("Left"))
+            	steerInput = -1;
+            if (Input.GetButton("Right"))
+            	steerInput = 1;
+        }
+            
+
+            if (steerInput < steering)
 		{
 			float steerSpeed = (steering>0)?(1/(steerReleaseTime+veloSteerReleaseTime*fVelo)) :(1/(steerTime+veloSteerTime*fVelo));
 			if (steering > optimalSteering)
@@ -158,9 +163,13 @@ public class CarController : MonoBehaviour {
 		}
 
         // Throttle/Brake
-
-        //bool accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
-        //bool brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
+            brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
+        }
+        //bool 
+        //bool 
 
         accelInput = accelKey;
         brakeInput = brakeKey;

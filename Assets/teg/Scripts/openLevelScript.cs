@@ -4,8 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class openLevelScript : MonoBehaviour {
 
-	public void OpenScene(string sceneName)
+    private GUIStyle guiStyle = new GUIStyle();
+    private bool loading = false;
+
+    public void OpenScene(string sceneName)
     {
+        loading = true;
+       
         SceneManager.LoadScene(sceneName);
     }
     
@@ -18,4 +23,14 @@ public class openLevelScript : MonoBehaviour {
 	void Update () {
 	
 	}
-}
+
+    void OnGUI()
+    {
+        if (loading)
+        {
+            GUI.contentColor = Color.black;
+            guiStyle.fontSize = 40; //change the font size
+            GUI.Label(new Rect(200, 200, 100, 20), ("Loading..."), guiStyle);
+        }
+    }
+    }
