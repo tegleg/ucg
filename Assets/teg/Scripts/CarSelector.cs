@@ -35,6 +35,13 @@ public class CarSelector : MonoBehaviour {
             {
                 cc.DisableCams();
             }
+
+            SoundController sc = CurrentCar.GetComponent<SoundController>();
+            print("soundcontroller = "+sc);
+            if (sc)
+            {
+                sc.enabled = false;
+            }
         }
         // 
         // Camera Cam = CurrentCar.transform.Find("hoodCamera");
@@ -64,6 +71,12 @@ public class CarSelector : MonoBehaviour {
         if (bInMenu)
         {
             CurrentCar.GetComponent<CamChanger>().DisableCams();
+            SoundController sc = CurrentCar.GetComponent<SoundController>();
+            print("soundcontroller = " + sc);
+            if (sc)
+            {
+                sc.enabled = false;
+            }
         }
 
         //handle inputs

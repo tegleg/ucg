@@ -37,6 +37,7 @@ public class CarController : MonoBehaviour {
     //player input
 	bool accelKey;//.GetKey (KeyCode.UpArrow);
 	bool brakeKey;
+    bool handbrakeKey;
     //drivetrain inputs
     bool accelInput;//.GetKey (KeyCode.UpArrow);
     bool brakeInput;
@@ -106,7 +107,12 @@ public class CarController : MonoBehaviour {
 		brakeKey = DoIt;
 	}
 
-	public void SetSteering(float Target){
+    public void SetHandBrake(bool DoIt)
+    {
+        handbrakeKey = DoIt;
+    }
+
+    public void SetSteering(float Target){
 		steerInput = Target;
 	}
 
@@ -167,6 +173,7 @@ public class CarController : MonoBehaviour {
         {
             accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
             brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
+            handbrakeKey = Input.GetButton("HandBrake");
         }
         //bool 
         //bool 
@@ -228,7 +235,7 @@ public class CarController : MonoBehaviour {
 		throttleInput = Mathf.Clamp (throttleInput, -1, 1);
 				
 		// Handbrake
-		handbrake = Mathf.Clamp01 ( handbrake + (Input.GetKey (KeyCode.Space)? Time.deltaTime: -Time.deltaTime) );
+		handbrake = Mathf.Clamp01 ( handbrake + (handbrakeKey ? Time.deltaTime: -Time.deltaTime) );
 		
 		// Gear shifting
 		float shiftThrottleFactor = Mathf.Clamp01((Time.time - lastShiftTime)/shiftSpeed);

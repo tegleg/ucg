@@ -27,6 +27,11 @@ public class InputHandler : MonoBehaviour {
         CC.SetBrake(DoIt);
     }
 
+    public void SetHandBrake(bool DoIt)
+    {
+        CC.SetHandBrake(DoIt);
+    }
+
     public void SetSteering(float Target)
     {
         CC.SetSteering(Target);
