@@ -8,7 +8,7 @@ using System.Collections;
 [RequireComponent (typeof (Drivetrain))]
 public class CarController : MonoBehaviour {
 
-	//public bool Accel;
+	public bool AIControlled = false;
 
 
 	// Add all wheels of the car here, so brake and steering forces can be applied to them.
@@ -35,14 +35,14 @@ public class CarController : MonoBehaviour {
 	float handbrake;
 
     //player input
-	bool accelKey;//.GetKey (KeyCode.UpArrow);
-	bool brakeKey;
+    public bool accelKey;//.GetKey (KeyCode.UpArrow);
+    public bool brakeKey;
     bool handbrakeKey;
     //drivetrain inputs
-    bool accelInput;//.GetKey (KeyCode.UpArrow);
-    bool brakeInput;
+    public bool accelInput;//.GetKey (KeyCode.UpArrow);
+    public bool brakeInput;
 
-    float steerInput = 0;
+    public float steerInput = 0;
 		
 	// cached Drivetrain reference
 	Drivetrain drivetrain;
@@ -100,20 +100,24 @@ public class CarController : MonoBehaviour {
 
 	public void SetAccel(bool DoIt){
 		//print ("called setaccel");
-		accelKey = DoIt;
+        if (!AIControlled) {accelKey = DoIt; }
+		
 	}
 
 	public void SetBrake(bool DoIt){
-		brakeKey = DoIt;
+        if (!AIControlled) {brakeKey = DoIt; }
+        
 	}
 
     public void SetHandBrake(bool DoIt)
     {
-        handbrakeKey = DoIt;
+        if (!AIControlled) {handbrakeKey = DoIt; }
+        
     }
 
     public void SetSteering(float Target){
-		steerInput = Target;
+        if (!AIControlled) {steerInput = Target; }
+        
 	}
 
 
@@ -139,7 +143,7 @@ public class CarController : MonoBehaviour {
 			optimalSteering = 0;
 
         //float 
-        if (Application.platform == RuntimePlatform.WindowsEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor && !AIControlled)
         {
             steerInput = 0;
             if (Input.GetButton("Left"))
@@ -169,7 +173,7 @@ public class CarController : MonoBehaviour {
 		}
 
         // Throttle/Brake
-        if (Application.platform == RuntimePlatform.WindowsEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor && !AIControlled)
         {
             accelKey = Input.GetButton("Accel");//.GetKey (KeyCode.UpArrow);
             brakeKey = Input.GetButton("Brake");//Input.GetKey (KeyCode.DownArrow);
